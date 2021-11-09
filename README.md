@@ -1,3 +1,3 @@
 ## STAT5702 Final Project: NYC Arrest Analysis
 
-For future references
+For future updates
