@@ -77,10 +77,6 @@ plot_missing <- function(df, percent,change_angle){
 plot_missing(df=data, percent=TRUE,change_angle = TRUE)
 ```
 
-```{r echo=FALSE}
-sum(rowSums(is.na(data))!=0)/nrow(data)
-```
-
 From the plot, we can see that compared with the whole data set there are very few NA values. After calculation, we find there are only 0.7% rows which contain NA values. Therefore, we decide to drop all the rows with NA values. 
 
 ```{r echo=FALSE}
