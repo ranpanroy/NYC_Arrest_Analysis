@@ -1,1 +1,13 @@
 # Data transformation
+
+We have two datasets, the first dataset contains data from 2006~2020, and the second dataset contains data from 2021 to now. The last columns of the 
+
+```{r echo=FALSE}
+# rename the last column of the two dataset
+colnames(data2)[ncol(data2)] = colnames(data1)[ncol(data1)]
+# combine the two data
+data = rbind(data1,data2)
+# only use data after 01/01/2012
+data$ARREST_DATE = as.Date(data$ARREST_DATE, "%m/%d/%Y")
+data = data %>% filter(ARREST_DATE > as.Date('01/01/2012', "%m/%d/%Y"))
+```
