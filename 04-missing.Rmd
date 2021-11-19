@@ -1,1 +1,87 @@
 # Missing values
+
+```{r echo=FALSE}
+plot_missing <- function(df, percent,change_angle){
+  missing_patterns <- data.frame(is.na(df)) %>%
+    group_by_all() %>%
+    count(name = "count", sort = TRUE) %>%
+    ungroup()
+  #variable_missing_plot
+  if (percent == TRUE){
+    missing_values = df %>%
+        gather(key = "key", value = "val") %>%
+        mutate(missing = is.na(val)) %>%
+        group_by(key, missing) %>%
+        summarise(num_missing = n()/nrow(df)) %>%
+        arrange(desc(num_missing))
+    missing_values[which((missing_values$num_missing==1)&missing_values$missing==FALSE), ]$num_missing = 0
+  }else{
+    missing_values = df %>%
+        gather(key = "key", value = "val") %>%
+        mutate(missing = is.na(val)) %>%
+        group_by(key, missing) %>%
+        summarise(num_missing = n()) %>%
+        arrange(desc(num_missing))
+    missing_values[which((missing_values$num_missing==nrow(df))&missing_values$missing==FALSE), ]$num_missing = 0
+  }
+  
+  missing_values[which(missing_values$num_missing==0), ]$missing = TRUE
+  variable_missing = missing_values %>% filter(missing==TRUE) %>%
+      select(-missing)
+  
+  if (percent == TRUE){
+    variable_missing_plot = ggplot(variable_missing, aes(x=fct_rev(fct_reorder(key, num_missing)), y=num_missing)) +    
+      geom_col(fill="cornflowerblue") + xlab("") + ylab("percent rows missing:") + ggtitle("Missing value patterns")  + 
+      theme_classic()
+  }else{
+    variable_missing_plot = ggplot(variable_missing, aes(x=fct_rev(fct_reorder(key, num_missing)), y=num_missing)) +    
+      geom_col(fill="cornflowerblue") + xlab("") + ylab("num rows missing:") + ggtitle("Missing value patterns")  + 
+      theme_classic()
+  }
+  
+  #main_plot
+  tidycars = missing_patterns[-ncol(missing_patterns)] %>% rownames_to_column("id") %>% gather(key, value, -id) %>% mutate(missing=ifelse(value, "yes", "no")) %>% group_by(id) %>% mutate(complete=ifelse(all(value==FALSE), "yes", "no")) %>% ungroup()
+  
+  x_levels = levels(fct_rev(fct_reorder(variable_missing$key, variable_missing$num_missing)))
+  y_levels = rev(unique(tidycars$id)) 
+  main_plot = ggplot(tidycars, aes(x=factor(key, levels=x_levels), y=factor(id, levels=y_levels))) +
+    geom_tile(color="black",aes(fill=ifelse(complete=="no", missing, NA))) + 
+    scale_fill_viridis_d(option="plasma", name="complete scale", na.value="grey") + 
+    xlab("variable") + ylab("missing pattern") +
+    theme_classic() + theme(legend.position = "None")
+  
+  #pattern_count_plot
+  y_levels = rev(unique(tidycars$id))
+  colflag = (rowSums(missing_patterns[-ncol(missing_patterns)])==0)
+  cols = case_when(colflag==TRUE~'grey',colflag==FALSE~'cornflowerblue')
+  if (percent==TRUE){
+    pattern_count_plot = ggplot(missing_patterns %>% rownames_to_column("id"), aes(x=count/nrow(df), y=factor(id, levels=y_levels))) +   geom_col(fill=cols) + xlab("row percent") + ylab(" ") + theme_classic()
+  }else{
+    pattern_count_plot = ggplot(missing_patterns %>% rownames_to_column("id"), aes(x=count, y=factor(id, levels=y_levels))) +   geom_col(fill=cols) + xlab("row count") + ylab(" ") + theme_classic()
+  }
+  
+  if(change_angle==TRUE){
+    main_plot = main_plot +
+      theme(axis.text.x = element_text(angle = 20,size=5))
+    variable_missing_plot = variable_missing_plot +
+      theme(axis.text.x = element_text(angle = 20,size=5))
+  }
+  
+  patch = (main_plot | pattern_count_plot) +  plot_layout(widths = c(4, 1))
+  patch2 = (variable_missing_plot |  plot_spacer()) + plot_layout(widths = c(3, 1))
+  return (patch2 / patch +  plot_layout(widths = c(4, 1), heights = c(1, 4)))
+}
+
+plot_missing(df=data, percent=TRUE,change_angle = TRUE)
+```
+
+```{r echo=FALSE}
+sum(rowSums(is.na(data))!=0)/nrow(data)
+```
+
+From the plot, we can see that compared with the whole data set there are very few NA values. After calculation, we find there are only 0.7% rows which contain NA values. Therefore, we decide to drop all the rows with NA values. 
+
+```{r echo=FALSE}
+data = data %>% drop_na()
+```
+
