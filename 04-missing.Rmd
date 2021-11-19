@@ -41,11 +41,12 @@ plot_missing <- function(df, percent,change_angle){
   
   #main_plot
   tidycars = missing_patterns[-ncol(missing_patterns)] %>% rownames_to_column("id") %>% gather(key, value, -id) %>% mutate(missing=ifelse(value, "yes", "no")) %>% group_by(id) %>% mutate(complete=ifelse(all(value==FALSE), "yes", "no")) %>% ungroup()
-  
+  complete_id = which(rowSums(missing_patterns[-length(missing_patterns)]) == 0)
   x_levels = levels(fct_rev(fct_reorder(variable_missing$key, variable_missing$num_missing)))
   y_levels = rev(unique(tidycars$id)) 
   main_plot = ggplot(tidycars, aes(x=factor(key, levels=x_levels), y=factor(id, levels=y_levels))) +
     geom_tile(color="black",aes(fill=ifelse(complete=="no", missing, NA))) + 
+    annotate(geom="text", x=length(missing_values$key)/2, y=max(unique(as.integer(tidycars$id))) - complete_id + 1,label="complete cases ")+
     scale_fill_viridis_d(option="plasma", name="complete scale", na.value="grey") + 
     xlab("variable") + ylab("missing pattern") +
     theme_classic() + theme(legend.position = "None")
