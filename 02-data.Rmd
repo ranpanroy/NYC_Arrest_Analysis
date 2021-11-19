@@ -1,2 +1,41 @@
 # Data sources
 
+The data we use is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. Each record represents an arrest effected in NYC by the NYPD and includes information about 
+
+1 Randomly generated persistent ID for each arrest
+
+2 Exact date of arrest for the reported event 
+
+3 Three digit internal classification code 
+
+4 Description of internal classification corresponding with PD code 
+
+5 Three digit internal classification code
+
+6 Description of internal classification corresponding with KY code
+
+7 Law code charges corresponding to the NYS Penal Law, VTL and other various local laws
+
+8 Level of offense: felony, misdemeanor, violation
+
+9 Borough of arrest. B(Bronx), S(Staten Island), K(Brooklyn), M(Manhattan), Q(Queens)
+
+10 Precinct where the arrest occurred
+
+11 Jurisdiction responsible for arrest. Jurisdiction codes 0(Patrol), 1(Transit) and 2(Housing) represent NYPD whilst codes 3 and more represent non NYPD jurisdictions
+
+12 Perpetrator’s age within a category
+
+13 Perpetrator’s sex description
+
+14 Perpetrator’s race description
+
+15 Midblock X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+
+16 Midblock Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+
+17 Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+
+18 Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+
+19 Georeferenced Point Column based on Longitude and Latitude fields
