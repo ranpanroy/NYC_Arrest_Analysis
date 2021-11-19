@@ -39,3 +39,8 @@ The data we use is a list of every arrest in NYC from 2006 to now. This data is 
 18 Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
 
 19 Georeferenced Point Column based on Longitude and Latitude fields
+
+```{r echo=FALSE}
+data1 = read_csv('NYPD_Arrests_Data__Historic_.csv',show_col_types = FALSE)
+data2 = read_csv('NYPD_Arrest_Data__Year_to_Date_.csv',show_col_types = FALSE)
+```
