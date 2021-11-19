@@ -24,7 +24,7 @@
 <meta name="author" content="Ran Pan, Yi Yang" />
 
 
-<meta name="date" content="2021-11-09" />
+<meta name="date" content="2021-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="data-sources.html"/>
 <link rel="next" href="missing-values.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -98,8 +99,10 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-transformation" class="section level1">
+<div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<p>We have two datasets, the first dataset contains data from 2006~2020, and the second dataset contains data from 2021 to now. The last column of the second dataset has the same content, but the different name with the last column of the first dataset. So First we rename the last column of the second dataset and then combine the two datasets.</p>
+<p>The “ARREST_DATE” column is in “char” format and we convert it into “Date” format. Since there are too much data in the dataset, we just focus on the data in the recent 10 years. So We just remain the records whose “ARREST_DATE” is larger than “01/01/2012”.</p>
 
 </div>
             </section>

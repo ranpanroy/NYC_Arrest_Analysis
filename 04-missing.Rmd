@@ -1,6 +1,7 @@
 # Missing values
 
 ```{r echo=FALSE}
+library(patchwork)
 plot_missing <- function(df, percent,change_angle){
   missing_patterns <- data.frame(is.na(df)) %>%
     group_by_all() %>%

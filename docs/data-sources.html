@@ -24,7 +24,7 @@
 <meta name="author" content="Ran Pan, Yi Yang" />
 
 
-<meta name="date" content="2021-11-09" />
+<meta name="date" content="2021-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="data-transformation.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -98,8 +99,29 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-sources" class="section level1">
+<div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
+<p>The data is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. The website for the data from 2006-2020 is: <a href="https://" class="uri">https://</a> data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u, and the website for the data from Jan, 2021 to the end of September, 2021 is: <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc" class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc</a>.</p>
+<p>The data includes information about</p>
+<p>1 ARREST_KEY (numeric): Randomly generated persistent ID for each arrest</p>
+<p>2 ARREST_DATE (character): Exact date of arrest for the reported event</p>
+<p>3 PD_CD (numeric): Three digit internal classification code</p>
+<p>4 PD_DESC (character): Description of internal classification corresponding with PD code</p>
+<p>5 KY_CD (numeric): Three digit internal classification code</p>
+<p>6 OFNS_DESC (character): Description of internal classification corresponding with KY code</p>
+<p>7 LAW_CODE (character): Law code charges corresponding to the NYS Penal Law, VTL and other various local laws</p>
+<p>8 LAW_CAT_CD (character): Level of offense: felony, misdemeanor, violation</p>
+<p>9 ARREST_BORO (character): Borough of arrest. B(Bronx), S(Staten Island), K(Brooklyn), M(Manhattan), Q(Queens)</p>
+<p>10 ARREST_PRECINCT (numeric): Precinct where the arrest occurred</p>
+<p>11 JURISDICTION_CODE (numeric): Jurisdiction responsible for arrest. Jurisdiction codes 0(Patrol), 1(Transit) and 2(Housing) represent NYPD whilst codes 3 and more represent non NYPD jurisdictions</p>
+<p>12 AGE_GROUP (character): Perpetrator’s age within a category</p>
+<p>13 PERP_SEX (character): Perpetrator’s sex description</p>
+<p>14 PERP_RACE (character): Perpetrator’s race description</p>
+<p>15 X_COORD_CD (numeric): Midblock X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</p>
+<p>16 Y_COORD_CD (numeric): Midblock Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)</p>
+<p>17 Latitude (numeric): Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)</p>
+<p>18 Longitude (numeric): Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)</p>
+<p>19 Lon_Lat (character): Georeferenced Point Column based on Longitude and Latitude fields</p>
 
 </div>
             </section>
