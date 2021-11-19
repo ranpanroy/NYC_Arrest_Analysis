@@ -1,6 +1,8 @@
 # Data transformation
 
-We have two datasets, the first dataset contains data from 2006~2020, and the second dataset contains data from 2021 to now. The last columns of the 
+We have two datasets, the first dataset contains data from 2006~2020, and the second dataset contains data from 2021 to now. The last column of the second dataset has the same content, but the different name with the last column of the first dataset. So First we rename the last column of the second dataset and then combine the two datasets.
+
+The "ARREST_DATE" column is in "char" format and we convert it into "Date" format. Since there are too much data in the dataset, we just focus on the data in the recent 10 years. So We just remain the records whose "ARREST_DATE" is larger than "01/01/2012".
 
 ```{r echo=FALSE}
 # rename the last column of the two dataset
