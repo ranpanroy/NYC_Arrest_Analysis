@@ -1,44 +1,48 @@
 # Data sources
 
-The data we use is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. Each record represents an arrest effected in NYC by the NYPD and includes information about 
 
-1 Randomly generated persistent ID for each arrest
+The data is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. The website for the data from 2006-2020 is: https:// data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u, and the website for the data from Jan, 2021 to the end of September, 2021 is: https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc.
 
-2 Exact date of arrest for the reported event 
+The data includes information about 
 
-3 Three digit internal classification code 
+1 ARREST_KEY (numeric): Randomly generated persistent ID for each arrest
 
-4 Description of internal classification corresponding with PD code 
+2 ARREST_DATE (character): Exact date of arrest for the reported event 
 
-5 Three digit internal classification code
+3 PD_CD (numeric): Three digit internal classification code 
 
-6 Description of internal classification corresponding with KY code
+4 PD_DESC (character): Description of internal classification corresponding with PD code 
 
-7 Law code charges corresponding to the NYS Penal Law, VTL and other various local laws
+5 KY_CD (numeric): Three digit internal classification code
 
-8 Level of offense: felony, misdemeanor, violation
+6 OFNS_DESC (character): Description of internal classification corresponding with KY code
 
-9 Borough of arrest. B(Bronx), S(Staten Island), K(Brooklyn), M(Manhattan), Q(Queens)
+7 LAW_CODE (character): Law code charges corresponding to the NYS Penal Law, VTL and other various local laws
 
-10 Precinct where the arrest occurred
+8 LAW_CAT_CD (character): Level of offense: felony, misdemeanor, violation
 
-11 Jurisdiction responsible for arrest. Jurisdiction codes 0(Patrol), 1(Transit) and 2(Housing) represent NYPD whilst codes 3 and more represent non NYPD jurisdictions
+9 ARREST_BORO (character): Borough of arrest. B(Bronx), S(Staten Island), K(Brooklyn), M(Manhattan), Q(Queens)
 
-12 Perpetrator’s age within a category
+10 ARREST_PRECINCT (numeric): Precinct where the arrest occurred
 
-13 Perpetrator’s sex description
+11 JURISDICTION_CODE (numeric): Jurisdiction responsible for arrest. Jurisdiction codes 0(Patrol), 1(Transit) and 2(Housing) represent NYPD whilst codes 3 and more represent non NYPD jurisdictions
 
-14 Perpetrator’s race description
+12 AGE_GROUP (character): Perpetrator’s age within a category
 
-15 Midblock X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+13 PERP_SEX (character): Perpetrator’s sex description
 
-16 Midblock Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+14 PERP_RACE (character): Perpetrator’s race description
 
-17 Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+15 X_COORD_CD (numeric): Midblock X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
 
-18 Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+16 Y_COORD_CD (numeric): Midblock Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
 
-19 Georeferenced Point Column based on Longitude and Latitude fields
+17 Latitude (numeric): Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+
+18 Longitude (numeric): Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+
+19 Lon_Lat (character): Georeferenced Point Column based on Longitude and Latitude fields
+
 
 ```{r echo=FALSE}
 data1 = read_csv('NYPD_Arrests_Data__Historic_.csv',show_col_types = FALSE)
