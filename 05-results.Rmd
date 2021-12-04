@@ -1,1 +1,68 @@
 # Results
+## New York City's Arrests
+New York City's crime, its distribution as well as its trend is an interesting topic to be investigated. This is a topic which allowed us to explore many angles and use many techniques. Below, you will find visualizations, and the insights derived from them, organized around the concepts of 4 Ws: **What**, **Where**, **When** and **Why**. <br> 
+Since we want to study the the characteristics of New York City’s crime among different boroughs, different age groups, different races, first of all I would plot some graphs to visualize the distributions of NYC crime.
+
+### Total Arrest Distribution throughout 2012-2021
+#### Distribution of Arrest Types
+First of all, let's use a bar plot to visualize the general distribution of arrest category. Since there are a lot of arrest types, I would only show the top 10 counts of the arrest types.
+
+```{r}
+arrest_types = data %>%group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% filter(OFNS_DESC %in% names(sort(table(OFNS_DESC), decreasing=TRUE)[1:10]))
+
+ggplot(arrest_types, aes(x=OFNS_DESC, y=ARREST_COUNT)) +
+  geom_col(color='black', fill='cornflowerblue') +
+  ggtitle('Distribution of Arrest Category') +
+  labs(x='Category', y='Count') +
+  coord_flip()
+```
+From the plot, we can observe that the highest number of arrests made by NYPD is to the type of "ASSAULT 3 $ RELATED OFFENSES", significantly larger than the rest of types. The second highest count is the type of "BURGLARY".
+
+#### Distribution of Arrest Type VS Boro of the Arrest
+```{r}
+types = c(unique(arrest_types$OFNS_DESC))
+ggplot(data %>% filter(OFNS_DESC %in% c("ABORTION", "ADMINISTRATIVE CODE", "ADMINISTRATIVE CODES", "AGRICULTURE & MRKTS LAW-UNCLASSIFIED", "ALCOHOLIC BEVERAGE CONTROL LAW", "ANTICIPATORY OFFENSES", "ARSON", "ASSAULT 3 & RELATED OFFENSES", "BURGLAR'S TOOLS", "BURGLARY")), aes(OFNS_DESC, fill=OFNS_DESC)) +
+  geom_bar() +
+  facet_wrap(~ARREST_BORO) +
+  ggtitle("Arrest Type VS Boro of the Arrest") +
+  coord_flip() +
+  theme(legend.title = element_text(size = 4), 
+               legend.text = element_text(size = 4))
+```
+The above visualizations inform us that the distribution of arrest types across NYC boros follow the same trend as the overall trend of arrest types.
+
+#### Time Series Analysis of Arrest Types
+```{r}
+data_time = data %>% filter(OFNS_DESC %in% c("ABORTION", "ADMINISTRATIVE CODE", "ADMINISTRATIVE CODES", "AGRICULTURE & MRKTS LAW-UNCLASSIFIED", "ALCOHOLIC BEVERAGE CONTROL LAW", "ANTICIPATORY OFFENSES", "ARSON", "ASSAULT 3 & RELATED OFFENSES", "BURGLAR'S TOOLS", "BURGLARY")) %>% group_by(Date=floor_date(ARREST_DATE, "year"), OFNS_DESC) %>% summarise(count=n())
+ggplot(data_time, aes(x=Date, y=count, color=OFNS_DESC)) + 
+  geom_line() +
+  ggtitle("Trned of Arrest in Every Arrest Category Throughout 2012-2021")
+```
+#### Time Series Analysis of Arrests Across Boroughs
+
+```{r}
+data_boro = data %>% group_by(Date=floor_date(ARREST_DATE, "year"), ARREST_BORO) %>%
+  summarise(count=n()) %>%
+  ungroup() %>%
+  group_by(ARREST_BORO)
+
+ggplot(data_boro, aes(x=Date, y=count, color=ARREST_BORO)) + 
+  geom_line() +
+  ggtitle("Trned of Arrest in Every NYC Boro Throughout 2012-2021")
+```
+
+
+```{r}
+boro_labels = c('Bronx', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island')
+ggplot(data, aes(x = ARREST_BORO, fill=AGE_GROUPOKOK)) +
+  geom_bar(color = "black", fill = "cornflowerblue") +
+  ggtitle("Arrest Count by Boro") +
+  labs(x = "Boro", y = "Count") + 
+  scale_x_discrete(labels= boro_labels  ) + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+From the plot, we can observe that Brooklyn has the most arrest counts. However, Manhattan also has a quite large arrest count. For Staten Island, it has the fewest arrest count, much less than the counts of other four boros.
+<br>
+
+Let's visualize how 

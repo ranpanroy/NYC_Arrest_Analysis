@@ -43,6 +43,22 @@ The data includes information about
 
 19 Lon_Lat (character): Georeferenced Point Column based on Longitude and Latitude fields
 
+```{r}
+# Load all packages needed for our project
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(corpus)
+library(forcats)
+library(tidyverse)
+library(tm)
+library(htmlTable)
+library(ggridges)
+library(lubridate)
+library(RColorBrewer)
+library(shiny)
+library(wordcloud2)
+```
 
 ```{r echo=FALSE}
 data1 = read_csv('NYPD_Arrests_Data__Historic_.csv',show_col_types = FALSE)

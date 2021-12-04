@@ -4,12 +4,20 @@ We have two datasets, the first dataset contains data from 2006~2020, and the se
 
 The "ARREST_DATE" column is in "char" format and we convert it into "Date" format. Since there are too much data in the dataset, we just focus on the data in the recent 10 years. So We just remain the records whose "ARREST_DATE" is larger than "01/01/2012".
 
+Additionally, we convert the column of "OFNS_DESC", "ARREST_BORO", "AGE_GROUP", "PERP_SEX", "PERP_RACE" into categorical variables for future analysis.
+
+
 ```{r echo=FALSE}
-# rename the last column of the two dataset
+# rename the last column of the two datasets
 colnames(data2)[ncol(data2)] = colnames(data1)[ncol(data1)]
 # combine the two data
 data = rbind(data1,data2)
 # only use data after 01/01/2012
 data$ARREST_DATE = as.Date(data$ARREST_DATE, "%m/%d/%Y")
 data = data %>% filter(ARREST_DATE > as.Date('01/01/2012', "%m/%d/%Y"))
+data$OFNS_DESC = as.factor(data$OFNS_DESC)
+data$ARREST_BORO = as.factor(data$ARREST_BORO)
+data$AGE_GROUP = as.factor(data$AGE_GROUP)
+data$PERP_SEX = as.factor(data$PERP_SEX)
+data$PERP_RACE = as.factor(data$PERP_RACE)
 ```
