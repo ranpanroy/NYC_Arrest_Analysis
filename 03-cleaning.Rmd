@@ -15,9 +15,11 @@ data = rbind(data1,data2)
 # only use data after 01/01/2012
 data$ARREST_DATE = as.Date(data$ARREST_DATE, "%m/%d/%Y")
 data = data %>% filter(ARREST_DATE > as.Date('01/01/2012', "%m/%d/%Y"))
-data$OFNS_DESC = as.factor(data$OFNS_DESC)
-data$ARREST_BORO = as.factor(data$ARREST_BORO)
-data$AGE_GROUP = as.factor(data$AGE_GROUP)
-data$PERP_SEX = as.factor(data$PERP_SEX)
-data$PERP_RACE = as.factor(data$PERP_RACE)
+#data$OFNS_DESC = as.factor(data$OFNS_DESC)
+#data$ARREST_BORO = as.factor(data$ARREST_BORO)
+#data$AGE_GROUP = as.factor(data$AGE_GROUP)
+#data$PERP_SEX = as.factor(data$PERP_SEX)
+#data$PERP_RACE = as.factor(data$PERP_RACE)
 ```
+
+

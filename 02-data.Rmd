@@ -43,8 +43,10 @@ The data includes information about
 
 19 Lon_Lat (character): Georeferenced Point Column based on Longitude and Latitude fields
 
-```{r}
-# Load all packages needed for our project
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(leaflet.extras)
 library(dplyr)
 library(ggplot2)
 library(magrittr)
@@ -54,13 +56,14 @@ library(tidyverse)
 library(tm)
 library(htmlTable)
 library(ggridges)
+library(reshape2)
 library(lubridate)
-library(RColorBrewer)
 library(shiny)
-library(wordcloud2)
 ```
 
 ```{r echo=FALSE}
 data1 = read_csv('NYPD_Arrests_Data__Historic_.csv',show_col_types = FALSE)
 data2 = read_csv('NYPD_Arrest_Data__Year_to_Date_.csv',show_col_types = FALSE)
 ```
+
+

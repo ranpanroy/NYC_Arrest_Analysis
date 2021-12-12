@@ -1,5 +1,6 @@
 book_filename: "finalproj"
 output_dir: docs
+runtime: shiny
 delete_merged_file: true
 edit: https://github.com/ranpanroy/NYC_Arrest_Analysis/edit/main/%s
 view: https://github.com/ranpanroy/NYC_Arrest_Analysis/blob/main/%s

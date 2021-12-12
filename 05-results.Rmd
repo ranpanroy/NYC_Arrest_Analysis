@@ -1,68 +1,331 @@
 # Results
 ## New York City's Arrests
-New York City's crime, its distribution as well as its trend is an interesting topic to be investigated. This is a topic which allowed us to explore many angles and use many techniques. Below, you will find visualizations, and the insights derived from them, organized around the concepts of 4 Ws: **What**, **Where**, **When** and **Why**. <br> 
-Since we want to study the the characteristics of New York City’s crime among different boroughs, different age groups, different races, first of all I would plot some graphs to visualize the distributions of NYC crime.
+In the result section, you will find visualizations, and the insights derived from the cleaned & preprocessed NYC Arrest dataset, organized around the concepts of 3 Ws: **What**, **Where**, and **When**. 
 
-### Total Arrest Distribution throughout 2012-2021
-#### Distribution of Arrest Types
-First of all, let's use a bar plot to visualize the general distribution of arrest category. Since there are a lot of arrest types, I would only show the top 10 counts of the arrest types.
+### What: 
+#### What is the distribution of Arrest Types?
+First of all, let's use a bar plot to visualize the general distribution of arrest category. Since there are a lot of arrest types, I would only show the top 15 counts of the arrest types. In this way, we are able to visualize what kind of crimes are happening and being arrested in NYC.
+
+```{r, warning=FALSE, figheight=2}
+arrest_types = data %>%group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT)) %>% top_n(15)
+colors_vals = as.character(unique(arrest_types$OFNS_DESC))
+
+
+ggplot(arrest_types, aes(x=reorder(OFNS_DESC, -ARREST_COUNT), y=ARREST_COUNT, fill=colors_vals, label=ARREST_COUNT)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=ARREST_COUNT), position=position_dodge(width=0.9), hjust=1, size=2) + 
+  ggtitle('Distribution of Top 15 Arrest Categories in NYC from 2012-2021') +
+  labs(x='Arrest Category', y='Arrest Count') +
+  coord_flip() +
+  theme(legend.title = element_text(size=7), 
+        legend.text = element_text(size=5), 
+        plot.title = element_text(size=10), 
+        axis.text=element_text(size=6))
+```
+From the plot, we can observe that the highest number of arrests made by NYPD is to the type of "Dangerous Drugs", having 466735 cases, significantly higher than the counts of rest of types. Indeed, NYC always has a bad reputation with dangerous drugs. The second highest count is the type of "Assault 3 & Related OFFENSES", which suggests the relative safety problem faced by NYC residents every day. We need to have tighter laws and control towards drugs as this is the most serious and frequent arrest categories.
+<br>
+
+Next, let's investigate the distribution of arrests count throughout NYC's 5 boroughs.
+
+#### What is the distribution of arrest rate in each NYC boroughs?
+```{r}
+boro_labels = c('Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island')
+populations = c(1390450, 2559903, 1628706, 2253858, 476143)
+boros_data = data %>% group_by(ARREST_BORO) %>% 
+  summarise(ARREST_COUNT=n())
+boros_data$AVG_ARREST = round(boros_data$ARREST_COUNT / populations / 10, 3)
+colors_vals = c(unique(boros_data$ARREST_BORO))
+
+ggplot(boros_data, aes(x=reorder(ARREST_BORO, -AVG_ARREST), y=AVG_ARREST, fill=colors_vals, label=AVG_ARREST)) +
+  geom_bar(stat="identity") +
+  scale_x_discrete(labels= boro_labels) + 
+  ggtitle("Average Arrest Per Boroughs Throughout 2012-2021") +
+  labs(x = "Borough", y = "Average Arrest Rate") +
+  geom_text(aes(label=AVG_ARREST), position=position_dodge(width=0.9), vjust=-0.4)
+```
+In the above bar plot, we calculated the average arrest rate of NYC residents across the ten year interval, from 2012-2021. The plot, suggests that for each year, residents in Manhattan will be arrested for an average of 0.046 times, the highest rate across the five boroughs. Bronx is the second highest with a rate of 0.045. Both rates are significantly higher than the rate of the rest of 3 boroughs. <br>
+
+Netx, let's check the 
+
+#### What kind of crimes do different age groups tend to commit?
 
 ```{r}
 arrest_types = data %>%group_by(OFNS_DESC) %>% 
-  summarise(ARREST_COUNT = n()) %>% filter(OFNS_DESC %in% names(sort(table(OFNS_DESC), decreasing=TRUE)[1:10]))
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT)) %>% top_n(15)
+arrest_vals = c(unique(arrest_types$OFNS_DESC))
 
-ggplot(arrest_types, aes(x=OFNS_DESC, y=ARREST_COUNT)) +
-  geom_col(color='black', fill='cornflowerblue') +
-  ggtitle('Distribution of Arrest Category') +
-  labs(x='Category', y='Count') +
-  coord_flip()
-```
-From the plot, we can observe that the highest number of arrests made by NYPD is to the type of "ASSAULT 3 $ RELATED OFFENSES", significantly larger than the rest of types. The second highest count is the type of "BURGLARY".
-
-#### Distribution of Arrest Type VS Boro of the Arrest
-```{r}
-types = c(unique(arrest_types$OFNS_DESC))
-ggplot(data %>% filter(OFNS_DESC %in% c("ABORTION", "ADMINISTRATIVE CODE", "ADMINISTRATIVE CODES", "AGRICULTURE & MRKTS LAW-UNCLASSIFIED", "ALCOHOLIC BEVERAGE CONTROL LAW", "ANTICIPATORY OFFENSES", "ARSON", "ASSAULT 3 & RELATED OFFENSES", "BURGLAR'S TOOLS", "BURGLARY")), aes(OFNS_DESC, fill=OFNS_DESC)) +
+ggplot(data %>% filter(OFNS_DESC %in% arrest_vals), aes(OFNS_DESC, fill=OFNS_DESC)) +
   geom_bar() +
-  facet_wrap(~ARREST_BORO) +
-  ggtitle("Arrest Type VS Boro of the Arrest") +
+  facet_wrap(AGE_GROUP ~ .) +
+  labs(x="Arrest Count", y="Arrest Categories") + 
+  ggtitle("Arrest Type VS AGE_GROUP of OFFENDERS") +
+  scale_fill_discrete(guide="none") + 
   coord_flip() +
-  theme(legend.title = element_text(size = 4), 
-               legend.text = element_text(size = 4))
-```
-The above visualizations inform us that the distribution of arrest types across NYC boros follow the same trend as the overall trend of arrest types.
+  theme(axis.text=element_text(size=7), 
+        axis.title=element_text(size=8))
 
-#### Time Series Analysis of Arrest Types
+ggplot(data %>% filter(OFNS_DESC %in% arrest_vals & PERP_RACE != "UNKNOWN"), aes(OFNS_DESC, fill=OFNS_DESC)) +
+  geom_bar() +
+  facet_wrap(PERP_RACE ~ .) +
+  labs(x="Arrest Count", y="Arrest Categories") +
+  ggtitle("Arrest Type VS Races of OFFENDERS") +
+  scale_fill_discrete(guide="none") + 
+  coord_flip() +
+  theme(axis.text=element_text(size=6), 
+        axis.title=element_text(size=8), 
+        strip.text = element_text(size=7))
+
+ggplot(data %>% filter(OFNS_DESC %in% arrest_vals & PERP_RACE != "UNKNOWN"), aes(OFNS_DESC, fill=OFNS_DESC)) +
+  geom_bar() +
+  facet_wrap(PERP_SEX ~ .) +
+  labs(x="Arrest Count", y="Arrest Categories") + 
+  ggtitle("Arrest Type VS Sex of OFFENDERS") +
+  scale_fill_discrete(guide="none") + 
+  coord_flip() +
+  theme(axis.text=element_text(size=6), 
+        axis.title=element_text(size=8), 
+        strip.text = element_text(size=7))
+```
+First of all, for residents whose age are older than 65, they barely commit any crimes or being arrested by NYPD. As expected, the arrests made by NYPD are heavily concentrated on the age group of 25-44. The second highest age group is 18-24. It indicates that most crimes committed and offenders arrested are in a relatively young age. For the distribution of offenders' age group younger than 65 vs arrest categories, we find that for age group from 18-64, "dangerous drugs" has the highest number of arrests made, which is consistent with the overall arrest categories distribution. For teenager who is under 18, however, "robbery", "assault" and "dangerous drugs" all have similar numbers of arrests, with robbery being the slightly highest. Unlike for other age groups, robbery stands out to be the most frequent one. This is alarming.
+We need to build better programs and have better education to get more teenagers off the streets and back to school. <br>
+
+For the distribution of offenders' race vs arrest categories, first we found that there are barely any arrests made to "American Indian / Alaskan Native", presumably because of the low populations of the group living in New York City. For the rest of the races, we can observe that, except for "Asian / Pacific Islander", all the offenders in the other races were being arrested due to "dangerous drugs" most frequently. For "Asian / Pacific Islander" residents, the highest arrest category is "Assault 3 & Related Offenses". Additionally, there is an alarming trend: The number of arrests made to black NYC residents is significantly higher than that of any other races. Is there a systematic discrimination against black people in the arrests made by NYPD? In the **When** section, we will use time series data to find out. However, better education and benefits program are necessary to solve this situation. <br>
+
+For the distribution of offenders' sex vs arrest categories, intuitively the number of male offenders are significantly higher than the number of female offenders. Interetsingily, for female offenders, the highest arrests made are to the category of "Assault 3 & Related Offenses", with "Petit Larceny" and "Dangerous Drugs" being closer for the second and third. On the other hand, male offenders in NYC are usually arrested for "Dangerous Drugs", which is consistent with the overall distribution. <br>
+
+In the next section, let's use some maps to explore and visualize the locations as well as each arrests being made.
+
+### Where:
+
+We will use New Yorkc City's map to visualize the type and location of the arrests occurred. For normal citizens, they are more concerned about crimes of theft, assault, weapons as well as robbery. Thus, we will create a map to visualize the frequencies of occurrences of these types of arrests.
+
 ```{r}
-data_time = data %>% filter(OFNS_DESC %in% c("ABORTION", "ADMINISTRATIVE CODE", "ADMINISTRATIVE CODES", "AGRICULTURE & MRKTS LAW-UNCLASSIFIED", "ALCOHOLIC BEVERAGE CONTROL LAW", "ANTICIPATORY OFFENSES", "ARSON", "ASSAULT 3 & RELATED OFFENSES", "BURGLAR'S TOOLS", "BURGLARY")) %>% group_by(Date=floor_date(ARREST_DATE, "year"), OFNS_DESC) %>% summarise(count=n())
-ggplot(data_time, aes(x=Date, y=count, color=OFNS_DESC)) + 
-  geom_line() +
-  ggtitle("Trned of Arrest in Every Arrest Category Throughout 2012-2021")
-```
-#### Time Series Analysis of Arrests Across Boroughs
-
-```{r}
-data_boro = data %>% group_by(Date=floor_date(ARREST_DATE, "year"), ARREST_BORO) %>%
-  summarise(count=n()) %>%
-  ungroup() %>%
-  group_by(ARREST_BORO)
-
-ggplot(data_boro, aes(x=Date, y=count, color=ARREST_BORO)) + 
-  geom_line() +
-  ggtitle("Trned of Arrest in Every NYC Boro Throughout 2012-2021")
+data$OFNS_DESC = as.factor(data$OFNS_DESC)
+data$ARREST_BORO = as.factor(data$ARREST_BORO)
+data$AGE_GROUP = as.factor(data$AGE_GROUP)
+data$PERP_SEX = as.factor(data$PERP_SEX)
+data$PERP_RACE = as.factor(data$PERP_RACE)
 ```
 
 
 ```{r}
-boro_labels = c('Bronx', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island')
-ggplot(data, aes(x = ARREST_BORO, fill=AGE_GROUPOKOK)) +
-  geom_bar(color = "black", fill = "cornflowerblue") +
-  ggtitle("Arrest Count by Boro") +
-  labs(x = "Boro", y = "Count") + 
-  scale_x_discrete(labels= boro_labels  ) + 
-  theme(plot.title = element_text(hjust = 0.5))
+# 偷窃相关的(中城和下城,也就是商业密集的地方)
+title = tags$div(HTML('<a>  Crimes Related to Theft </a>')) 
+nycb = data %>%
+  filter(OFNS_DESC %in% c('PETIT LARCENY','OTHER OFFENSES RELATED TO THEFT','GRAND LARCENY')) %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 11, maxZoom = 11)) %>% 
+  addTiles() %>% 
+  setView(lat = 40.73061, lng = -73.935242, zoom = 11) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=15,radius=2, blur=2) %>%
+  addControl(title, position = "topleft")
 ```
-From the plot, we can observe that Brooklyn has the most arrest counts. However, Manhattan also has a quite large arrest count. For Staten Island, it has the fewest arrest count, much less than the counts of other four boros.
-<br>
 
-Let's visualize how 
+
+
+```{r}
+# weapon（主要就是在哈莱姆和布鲁克林）
+title = tags$div(HTML('<a>  Crimes Related to Weapons </a>')) 
+nycw = data %>%
+  filter(OFNS_DESC=='DANGEROUS WEAPONS') %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 11, maxZoom = 11)) %>% 
+  addTiles() %>%
+  setView(lat = 40.73061, lng = -73.935242, zoom = 11) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=10,radius=2,blur=1) %>%
+  addControl(title, position = "topleft")
+```
+
+```{r}
+# ASSAULT 和 murder
+title = tags$div(HTML('<a>  Crimes Related to Assualt and Murder </a>'))  
+nyca = data %>%
+  filter(OFNS_DESC %in% c('ASSAULT 3 & RELATED OFFENSES','FELONY ASSAULT','MURDER & NON-NEGL. MANSLAUGHTER')) %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 11, maxZoom = 11)) %>% 
+  addTiles() %>% 
+  setView(lat = 40.73061, lng = -73.935242, zoom = 11) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=15,radius=2,blur=2)%>%
+  addControl(title, position = "topleft")
+```
+
+
+```{r}
+# 抢劫（哈莱姆和中城）
+title = tags$div(HTML('<a>  Crimes Related to Robbery </a>'))  
+nycr = data %>%
+  filter(OFNS_DESC=='ROBBERY') %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 11, maxZoom = 11)) %>% 
+  addTiles() %>% 
+  setView(lat = 40.73061, lng = -73.935242, zoom = 11) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=10,radius=3,blur=3) %>%
+  addControl(title, position = "topleft")
+```
+
+```{r}
+nycb
+nycw
+nyca
+nycr
+```
+For crimes regarding theft, from the map, we can observe that they are heavily concentrated in Manhattan's mid town and downtown. Most New York City's business centers and financial centers are located there, which explains the high case counts of theft. After all, mid town and downtown locate NYC's central business district. <br>
+
+From the map of weapon related arrests, we can observe that they are mostly concentrated in Harlem of Manhattan, Bronx and Brooklyn. These three neighborhoods also have heavy gang activities, which corresponds to the heavy weapon related crimes. Regular residents should avoid traveling through these locations alone, especially on foot, as the regions are flooded with guns. <br>
+
+For the map of assaults & murder related arrests, we can observe that they are mostly made in the population-heavy areas. However, Upper Manhattan and Bronx have the worst problem of assault & murders, which is consistent with the map of weapon related arrests. <br>
+
+For the map of robbery related arrests, similarly, cases are heavily concentrated in Harlem, Bronx. Also, downtown and mid town Manhattan have high cases counts as well. Due to the higher concentration of middle class and upper class people in mid town and downtown Manhattan, it has become a location of robbery as well. <br>
+
+#### Columbia University
+As Columbia Lions, we are also curious about the arrests being made around the campus, especially for 
+Where are the most frequent places and how should we avoid the areas? Let's find out in the following maps.
+
+```{r}
+# 现在的结果可以看出来越远离校园越危险（其实就是越靠近哈莱姆越危险）
+title = tags$div(HTML('<a>  Crimes Realted to Assault & Murders around Columbia University Campus </a>'))  
+cu_assault = data %>%
+  filter(Latitude>40.800598) %>% 
+  filter(Latitude<40.815784) %>%
+  filter(Longitude<(-73.951225)) %>%
+  filter(Longitude>(-73.970574)) %>%
+  filter(OFNS_DESC %in% c('ASSAULT 3 & RELATED OFFENSES','FELONY ASSAULT','MURDER & NON-NEGL. MANSLAUGHTER')) %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 14, maxZoom = 14)) %>% 
+  addTiles() %>% 
+  setView(lat = 40.805, lng = -73.96, zoom = 14) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=5,radius=6,blur=3) %>%
+  addMarkers(lat=40.808598, lng=-73.961225,label ='Columbia University',labelOptions = labelOptions(noHide = T, direction = 'top', textOnly = T,style = list("color" = "blue")))%>%
+  addControl(title, position = "topleft")
+```
+
+```{r}
+#哥大别的图都跟第一个结论类似
+title = tags$div(HTML('<a>  Crimes Related to Robbery around Columbia University Campus </a>'))  
+cu_rob = data %>%
+  filter(Latitude>40.800598) %>% 
+  filter(Latitude<40.815784) %>%
+  filter(Longitude<(-73.951225)) %>%
+  filter(Longitude>(-73.970574)) %>%
+  filter(OFNS_DESC=='ROBBERY') %>%
+  leaflet(options = leafletOptions(zoomControl = FALSE,minZoom = 14, maxZoom = 14)) %>% 
+  addTiles() %>% 
+  setView(lat = 40.805, lng = -73.96, zoom = 14) %>%
+  addHeatmap(lng=~Longitude,lat=~Latitude,max=2,radius=5,blur=3)%>%
+  addMarkers(lat=40.808598, lng=-73.961225,label ='Columbia University',labelOptions = labelOptions(noHide = T, direction =   'top', textOnly = T,style = list("color" = "blue")))%>%
+  addControl(title, position = "topleft")
+```
+
+```{r}
+cu_assault
+cu_rob
+```
+From the two maps, we can observe that the further from the campus, the more arrests are being made. For instance, as we get closer to Harlem, arrests of Assault, Murder and Robbery are increasing. Therefore, we would want to stay close to the campus, when we travel alone. 
+```{r}
+data$OFNS_DESC = as.character(data$OFNS_DESC)
+data$ARREST_BORO = as.character(data$ARREST_BORO)
+data$AGE_GROUP = as.character(data$AGE_GROUP)
+data$PERP_SEX = as.character(data$PERP_SEX)
+data$PERP_RACE = as.character(data$PERP_RACE)
+```
+
+### When: 
+In this section, we would like to investigate the development of the trend of arrests categories throughout 2012-2021. How is the overall arrests distribution developed over time? How has the types of arrests being made changed over time? We will use ridge plots and line plots to find out.
+
+```{r}
+arrest_types = data %>%group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT)) %>% top_n(15)
+colors_vals = as.character(unique(arrest_types$OFNS_DESC))
+
+arrest_time = data %>% 
+  filter(OFNS_DESC %in% colors_vals)
+
+ggplot(arrest_time, aes(x=ARREST_DATE, y=OFNS_DESC, fill=OFNS_DESC)) + 
+  geom_density_ridges(scale=3, rel_min_height = 0.01) + theme_ridges() + 
+  scale_fill_discrete(guide="none") +
+  scale_y_discrete(expand = c(0.3, 0)) + 
+  labs(y="Arrest Categories", x="Year") +
+  ggtitle("Density Distribution of Top 15 Arrest Categories in NYC between 2012-2021") +
+  theme(axis.text=element_text(size=6), 
+        axis.title=element_text(size=10), 
+        strip.text=element_text(size=7),
+        plot.title=element_text(size=10))
+```
+Due to the high number of the arrest categories, we will first focus on the top 15 arrest categories. The ridge plot indicates that, for each type of the top 15 Arrest types, the overall distribution is moving toward a downward trend. The number of arrests made to the major arrest categories are all decreasing toward the end of 2021. For instance, there is a sharp decrease since 2018 for "Dangerous Drugs" and a sharp decline for "Petit Larceny" since 2016. It could suggests that the overall safety in NYC is getting better. Less and less offenders are being arrested by NYPD throughout 2012-2021. <br>
+
+Similarly, let's see how the trend of crimes in each boroughs change throughout the years, using a line plot.
+
+```{r, warning=FALSE}
+boros_time = data %>% mutate(YEAR=floor_date(ARREST_DATE, "year")) %>%
+  group_by(YEAR, ARREST_BORO) %>% summarise(ARREST_COUNT = n()) 
+boro_labels = c('Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten Island')
+
+ggplot(boros_time, aes(x=YEAR, y=ARREST_COUNT, group=ARREST_BORO)) +
+  geom_line(aes(color=ARREST_BORO, linetype=ARREST_BORO)) +
+  geom_point(aes(shape=ARREST_BORO, color=ARREST_BORO)) + 
+  labs(x="Year", y="Arrest Count") + 
+  ggtitle("Distribution of Arrest Categories in NYC Boroughs between 2012-2021")+ 
+  theme(axis.text=element_text(size=10), 
+        axis.title=element_text(size=10), 
+        strip.text=element_text(size=7),
+        plot.title=element_text(size=10))
+```
+
+The above plot also shows that for each of the borough, the crime counts are decreasing from 2012-2021. Even though in 2014 and 2016 there are a little spikes in crime counts, the overall trends are in decline, especially for recent years. This finding also corresponds to our previous findings that the overall arrest counts in NYC is in a downward trend. additionally, we can observe that, except for Staten Island, the gaps of arrests counts between the other four boroughs are closing and the arrests count of the four boroughs are all converging toward a lower number at the end of 2021. 
+
+
+#### Arrests Trend for Teenage Perpetrator
+As mentioned in the previous section, the distribution of arrests made to teenagers are different to the other age groups. Here, we would want to visualize the trend of teenage crimes, how has the crime categories changed throughout the years?
+
+```{r, fig.height=10, fig.width=10}
+top_teen_crimes = data %>% filter(AGE_GROUP == "<18") %>% group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT)) %>% top_n(40)
+top_crimes = c(unique(top_teen_crimes$OFNS_DESC))
+teen = data %>% filter(AGE_GROUP == "<18" & OFNS_DESC %in% top_crimes)
+
+ggplot(teen, aes(x=ARREST_DATE, y=OFNS_DESC, fill=OFNS_DESC)) + 
+  geom_density_ridges(scale=3) + theme_ridges() + 
+  scale_fill_discrete(guide="none") +
+  scale_y_discrete(expand = c(0.3, 0)) + 
+  labs(y="Arrest Categories", x="Year") +
+  ggtitle("Density Distribution of Top 15 Arrest Categories Among Teenagers in NYC between 2012-2021") +
+  theme(axis.text=element_text(size=8),  
+        axis.title=element_text(size=10), 
+        strip.text=element_text(size=7),
+        plot.title=element_text(size=10))
+
+```
+As we can observe from the ridge plot, the overall trend is promising as the number of arrests made to teen offenders is declining. A lot of teenagers were arrested for the possession of stolen property from 2012 - 2014, and the number suddenly drops. Also, for the highest counts arrest categories of teenagers, "Dangerous Drugs", "Robbery" and "Assault 3 & Related Offense", they are all decreasing from 2012-201. However, we can observe that there are some increasing trends in certain arrest categories. For instance, 'Murder & Non-NEGL. Manslaughter", "Unauthorized use of a Vehicle" and "Criminal Mischief & Related OF" are all spiking in 2020 and 2021. Even though the overall number of crimes committed by teenagers are decreasing, we should be alert of the increase in certain categories. 
+
+Next, we will use a summary table to describe the effect of Covid pandemic to the arrests made in New York City.
+
+#### What's the effect of Covid to the general arrest / crime trend in NYC? Let's use a table to indicate the summarized difference
+
+```{r}
+library(scales)
+library(kableExtra)
+covid_before = data %>% 
+  filter(ARREST_DATE >= "2019-04-01" & ARREST_DATE <= "2020-04-01") %>%
+  group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT))
+
+covid_after = data %>% 
+  filter(ARREST_DATE > "2020-04-01" & ARREST_DATE <= "2021-04-01") %>%
+  group_by(OFNS_DESC) %>% 
+  summarise(ARREST_COUNT = n()) %>% arrange(desc(ARREST_COUNT))
+
+df = merge(covid_before, covid_after, by="OFNS_DESC")
+df$PERC_CHANGE = label_percent()((df$ARREST_COUNT.y - df$ARREST_COUNT.x) / df$ARREST_COUNT.x)
+colnames(df) = c("Arrest_Category", "Arrest_Count_Before_Covid", "Arrest_Count_After_Covid", "Percentage_Change")
+df = df %>% filter(Arrest_Count_Before_Covid >= 100 | Arrest_Count_After_Covid >= 100)
+df_high = df %>% filter(Percentage_Change > 0) %>% arrange(desc(Percentage_Change))
+df_low = df %>% filter(Percentage_Change < 0) %>% arrange(desc(Percentage_Change))
+df_high %>%
+  kbl(caption = "Arrests Categories that experienced Decrease after Covid") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+df_low %>%
+  kbl(caption = "Arrests Categories that experienced Decrease after Covid") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+We compared the arrests made for the two time intervals, one pre Covid between 2019-04-01 to 2020-04-01 and the other post Covid between 2020-04-01 and 2021-04-01. As expected from the previous explorations, there is a decrease in the arrests made to the most types of crimes post Covid. This is likely due to the government's relief packages as well as the lockdown measures. However, there are four crime types that experienced increase since the Covid pandemic. For "Offense Involving Fraud", the number of arrests made increases from 1070 to 2015, a total increase of 92%. After Covid, people may prefer conduct businesses through online platforms, which gives offenders more opportunities to commit fraud. The arrests count of "Burglary", and "Murder & Non-Negl Manslaughter" also increases significantly, 29% and 16% respectively. Covid pandemic is taking a tow to many people, and for some, they sought to extreme measures toward their problems. 
+
+
+
+ 

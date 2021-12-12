@@ -1,2 +1,4 @@
 # Conclusion
+Throughout the project, we have discovered that the most common crime among New York City is the possession of dangerous drugs. Also, the arrests made by NYPD are heavily concentrated on the age group of 25-44. For the location of the crimes and arrests, we have found that they are mostly concentrated in Harlem, Brooklyn, Bronx, as well as downtown Manhattan. Around the campus of Columbia University, there are not many arrests being made, and the closer we get to campus, the safer we are.
+Lastly, we found that the overall arrest counts in New York City is decreasing, which suggests that the relative safety as well as living conditions for NYC residents are improving. 
 
