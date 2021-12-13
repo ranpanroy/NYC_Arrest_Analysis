@@ -1,4 +1,4 @@
-tab:unnamed-chunk-26
+tab:unnamed-chunk-27
 introduction
 data-sources
 data-transformation
@@ -15,4 +15,6 @@ when
 arrests-trend-for-teenage-perpetrator
 whats-the-effect-of-covid-to-the-general-arrest-crime-trend-in-nyc-lets-use-a-table-to-indicate-the-summarized-difference
 interactive-component
+new-york-city-arrest-categories-map
+new-york-city-arrest-counts-among-different-races
 conclusion

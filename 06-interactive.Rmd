@@ -1,8 +1,11 @@
 # Interactive component
-
+## New York City Arrest Categories Map
 ```{r}
 knitr::include_app("https://yy3105.shinyapps.io/5702_Final_Project/")
 ```
 
-
+## New York City Arrest Counts Among Different Races
+```{r}
+htmltools::includeHTML("animation.html")
+```
 
