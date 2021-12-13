@@ -1,7 +1,7 @@
 # Data sources
 
 
-The data is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. The website for the data from 2006-2020 is: https:// data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u, and the website for the data from Jan, 2021 to the end of September, 2021 is: https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc.
+The data is a list of every arrest in NYC from 2006 to now. This data is manually extracted every quarter and reviewed by the Office of Management Analysis and Planning before being posted on the NYPD website. The website for the data from 2006-2020 is: https://data.cityofnewyork.us/Public-Safety/NYPD-Arrests-Data-Historic-/8h9b-rp9u, and the website for the data from Jan, 2021 to the end of September, 2021 is: https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc.
 
 The data includes information about 
 

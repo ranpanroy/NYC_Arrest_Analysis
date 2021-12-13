@@ -87,6 +87,7 @@ ggplot(data %>% filter(OFNS_DESC %in% arrest_vals & PERP_RACE != "UNKNOWN"), aes
         axis.title=element_text(size=8), 
         strip.text = element_text(size=7))
 ```
+<br>
 First of all, for residents whose age are older than 65, they barely commit any crimes or being arrested by NYPD. As expected, the arrests made by NYPD are heavily concentrated on the age group of 25-44. The second highest age group is 18-24. It indicates that most crimes committed and offenders arrested are in a relatively young age. For the distribution of offenders' age group younger than 65 vs arrest categories, we find that for age group from 18-64, "dangerous drugs" has the highest number of arrests made, which is consistent with the overall arrest categories distribution. For teenager who is under 18, however, "robbery", "assault" and "dangerous drugs" all have similar numbers of arrests, with robbery being the slightly highest. Unlike for other age groups, robbery stands out to be the most frequent one. This is alarming.
 We need to build better programs and have better education to get more teenagers off the streets and back to school. <br>
 
