@@ -103,7 +103,12 @@
 <li class="chapter" data-level="6.1" data-path="interactive-component.html"><a href="interactive-component.html#new-york-city-arrest-categories-map"><i class="fa fa-check"></i><b>6.1</b> New York City Arrest Categories Map</a></li>
 <li class="chapter" data-level="6.2" data-path="interactive-component.html"><a href="interactive-component.html#new-york-city-arrest-counts-among-different-races"><i class="fa fa-check"></i><b>6.2</b> New York City Arrest Counts Among Different Races</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#lesson-learned"><i class="fa fa-check"></i><b>7.1</b> Lesson Learned</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#limitations"><i class="fa fa-check"></i><b>7.2</b> Limitations</a></li>
+<li class="chapter" data-level="7.3" data-path="conclusion.html"><a href="conclusion.html#future-directions"><i class="fa fa-check"></i><b>7.3</b> Future Directions</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -127,27 +132,27 @@
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>From the plot, we can see that compared with the whole data set there are very few NA values. After calculation, we find there are only 0.7% rows which contain NA values. Therefore, we decide to drop all the rows with NA values. Below is the summary of the arrest dataset.</p>
-<pre><code>##    ARREST_KEY         ARREST_DATE             PD_CD         PD_DESC              KY_CD        OFNS_DESC           LAW_CODE          LAW_CAT_CD        ARREST_BORO       
-##  Min.   : 82422313   Min.   :2012-01-02   Min.   : 11.0   Length:2814549     Min.   :101.0   Length:2814549     Length:2814549     Length:2814549     Length:2814549    
-##  1st Qu.: 93021166   1st Qu.:2013-10-10   1st Qu.:259.0   Class :character   1st Qu.:121.0   Class :character   Class :character   Class :character   Class :character  
-##  Median :145954364   Median :2015-09-08   Median :494.0   Mode  :character   Median :341.0   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   :143809663   Mean   :2016-01-03   Mean   :494.3                      Mean   :284.8                                                                              
-##  3rd Qu.:173498667   3rd Qu.:2018-01-11   3rd Qu.:748.0                      3rd Qu.:348.0                                                                              
-##  Max.   :234352983   Max.   :2021-09-30   Max.   :997.0                      Max.   :995.0                                                                              
-##  ARREST_PRECINCT  JURISDICTION_CODE  AGE_GROUP           PERP_SEX          PERP_RACE           X_COORD_CD        Y_COORD_CD         Latitude       Longitude     
-##  Min.   :  1.00   Min.   : 0.000    Length:2814549     Length:2814549     Length:2814549     Min.   : 913357   Min.   : 121131   Min.   :40.50   Min.   :-74.25  
-##  1st Qu.: 33.00   1st Qu.: 0.000    Class :character   Class :character   Class :character   1st Qu.: 992062   1st Qu.: 186387   1st Qu.:40.68   1st Qu.:-73.97  
-##  Median : 60.00   Median : 0.000    Mode  :character   Mode  :character   Mode  :character   Median :1004749   Median : 207813   Median :40.74   Median :-73.93  
-##  Mean   : 61.25   Mean   : 1.339                                                             Mean   :1005390   Mean   : 209972   Mean   :40.74   Mean   :-73.92  
-##  3rd Qu.: 88.00   3rd Qu.: 0.000                                                             3rd Qu.:1016539   3rd Qu.: 236095   3rd Qu.:40.81   3rd Qu.:-73.88  
-##  Max.   :123.00   Max.   :97.000                                                             Max.   :1067302   Max.   :8202360   Max.   :62.08   Max.   :-73.68  
-##    Lon_Lat         
-##  Length:2814549    
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## </code></pre>
+<pre><code>##    ARREST_KEY         ARREST_DATE             PD_CD         PD_DESC              KY_CD        OFNS_DESC           LAW_CODE        
+##  Min.   : 82422313   Min.   :2012-01-02   Min.   : 11.0   Length:2814549     Min.   :101.0   Length:2814549     Length:2814549    
+##  1st Qu.: 93021166   1st Qu.:2013-10-10   1st Qu.:259.0   Class :character   1st Qu.:121.0   Class :character   Class :character  
+##  Median :145954364   Median :2015-09-08   Median :494.0   Mode  :character   Median :341.0   Mode  :character   Mode  :character  
+##  Mean   :143809663   Mean   :2016-01-03   Mean   :494.3                      Mean   :284.8                                        
+##  3rd Qu.:173498667   3rd Qu.:2018-01-11   3rd Qu.:748.0                      3rd Qu.:348.0                                        
+##  Max.   :234352983   Max.   :2021-09-30   Max.   :997.0                      Max.   :995.0                                        
+##   LAW_CAT_CD        ARREST_BORO        ARREST_PRECINCT  JURISDICTION_CODE  AGE_GROUP           PERP_SEX          PERP_RACE        
+##  Length:2814549     Length:2814549     Min.   :  1.00   Min.   : 0.000    Length:2814549     Length:2814549     Length:2814549    
+##  Class :character   Class :character   1st Qu.: 33.00   1st Qu.: 0.000    Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Median : 60.00   Median : 0.000    Mode  :character   Mode  :character   Mode  :character  
+##                                        Mean   : 61.25   Mean   : 1.339                                                            
+##                                        3rd Qu.: 88.00   3rd Qu.: 0.000                                                            
+##                                        Max.   :123.00   Max.   :97.000                                                            
+##    X_COORD_CD        Y_COORD_CD         Latitude       Longitude        Lon_Lat         
+##  Min.   : 913357   Min.   : 121131   Min.   :40.50   Min.   :-74.25   Length:2814549    
+##  1st Qu.: 992062   1st Qu.: 186387   1st Qu.:40.68   1st Qu.:-73.97   Class :character  
+##  Median :1004749   Median : 207813   Median :40.74   Median :-73.93   Mode  :character  
+##  Mean   :1005390   Mean   : 209972   Mean   :40.74   Mean   :-73.92                     
+##  3rd Qu.:1016539   3rd Qu.: 236095   3rd Qu.:40.81   3rd Qu.:-73.88                     
+##  Max.   :1067302   Max.   :8202360   Max.   :62.08   Max.   :-73.68</code></pre>
 
 </div>
             </section>

@@ -1,4 +1,15 @@
 # Conclusion
-Throughout the project, we have discovered that the most common crime among New York City is the possession of dangerous drugs. Also, the arrests made by NYPD are heavily concentrated on the age group of 25-44. For the location of the crimes and arrests, we have found that they are mostly concentrated in Harlem, Brooklyn, Bronx, as well as downtown Manhattan. Around the campus of Columbia University, there are not many arrests being made, and the closer we get to campus, the safer we are.
-Lastly, we found that the overall arrest counts in New York City is decreasing, which suggests that the relative safety as well as living conditions for NYC residents are improving. 
+
+## Lesson Learned
+Throughout the project, we have discovered that the most common crime among New York City is the possession of dangerous drugs. Also, the arrests made by NYPD are heavily concentrated on the age group of 25-44. For the location of the crimes and arrests, we have found that they are mostly concentrated in Harlem, Brooklyn, Bronx, as well as downtown Manhattan. Around the campus of Columbia University, there are not many arrests being made, and the closer we get to campus, the safer we are. <br>
+Lastly, we found that the overall arrest counts in New York City is decreasing, which suggests that the relative safety as well as living conditions for NYC residents are improving. <br>
+
+## Limitations
+The limitations we had for this projects are the high number of levels of the categorical variables, especially for the Arrest Categories. It makes difficult to conduct visualizations with some many levels of a feature. Therefore, for some of the graphs we had to select a subset of the Arrest categories to visualize. <br>
+
+## Future Directions
+For future directions, we would want to incorporate some economics data to investigate the how the socioeconomic status of New York City affects its crime and arrest patterns.
+Additionally, we would want to convert additional static graphs to interactive graphs for better, more informative visualizations, possibly through D3.
+
+
 

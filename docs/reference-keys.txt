@@ -18,3 +18,6 @@ interactive-component
 new-york-city-arrest-categories-map
 new-york-city-arrest-counts-among-different-races
 conclusion
+lesson-learned
+limitations
+future-directions
